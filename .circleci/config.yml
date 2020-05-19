@@ -1,21 +1,16 @@
 version: 2.1
-
 orbs:
-  python: circleci/python@0.2.1
-
+   aws-cli: circleci/aws-cli@1.0
+   serverless: circleci/serverless-framework@1.0
 jobs:
-  build-and-test:
-    executor: python/default
-    steps:
-      - checkout
-      - python/load-cache
-      - python/install-deps
-      - python/save-cache
-      - run:
-          command: ./manage.py test
-          name: Test
-
+   one:
+     executor: serverless/default
+     steps:
+       - checkout
+       - aws-cli/setup
+       - serverless/setup
+       - run: sls deploy
 workflows:
-  main:
+  one_and_two:
     jobs:
-      - build-and-test
+      - one
